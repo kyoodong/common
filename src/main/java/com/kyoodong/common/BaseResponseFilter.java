@@ -17,7 +17,7 @@ public class BaseResponseFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         ContentCachingResponseWrapper ccrw = new ContentCachingResponseWrapper(res);
         chain.doFilter(request, ccrw);
-        String content = new String(ccrw.getContentAsByteArray());
+        byte[] content = ccrw.getContentAsByteArray();
 
         if (res.getStatus() == HttpStatus.OK.value()) {
             BaseResponseBody responseBody = new BaseResponseBody(

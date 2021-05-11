@@ -1,15 +1,18 @@
 package com.kyoodong.common;
 
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 public class BaseResponseBody {
 
     private boolean isSuccess;
-    private String data;
+    private byte[] data;
     private long timestamp;
     private int status;
     private String errorCode;
     private String errorMessage;
 
-    public BaseResponseBody(boolean isSuccess, String data, long timestamp, String errorCode, String errorMessage, int status) {
+    public BaseResponseBody(boolean isSuccess, byte[] data, long timestamp, String errorCode, String errorMessage, int status) {
         this.isSuccess = isSuccess;
         this.data = data;
         this.timestamp = timestamp;
@@ -42,10 +45,6 @@ public class BaseResponseBody {
         return data;
     }
 
-    public void setData(String data) {
-        this.data = data;
-    }
-
     public long getTimestamp() {
         return timestamp;
     }
@@ -56,9 +55,17 @@ public class BaseResponseBody {
 
     @Override
     public String toString() {
+        String dataString = new String(data);
+        JSONParser parser = new JSONParser();
+        try {
+            parser.parse(dataString);
+        } catch (ParseException e) {
+            dataString = "\"" + dataString + "\"";
+        }
+
         return "{" +
             "\"isSuccess\":" + isSuccess +
-            ", \"data\":\"" + data + "\"" +
+            ", \"data\":" + dataString +
             ", \"timestamp\":" + timestamp +
             ", \"errorCode\":\"" + errorCode + "\"" +
             ", \"errorMessage\":\"" + errorMessage + "\"" +
